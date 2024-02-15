@@ -19,6 +19,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const userRoutes = require("./routes/users");
 const movieRoutes = require("./routes/movies");
 const reviewRoutes = require("./routes/reviews");
+const adminRoutes = require("./routes/admin");
 
 const MongoDBStore = require("connect-mongodb-session")(session);
 
@@ -82,6 +83,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    // console.log(res.locals.currentUser);
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
@@ -90,6 +92,7 @@ app.use((req, res, next) => {
 app.use("/", userRoutes);
 app.use("/movies", movieRoutes);
 app.use("/movies/:id/reviews", reviewRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.render("home");

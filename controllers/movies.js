@@ -3,7 +3,7 @@ const { cloudinary } = require('../cloudinary');
 
 
 module.exports.index = async(req,res)=>{
-    const movies = await Movie.find({});
+    const movies = await Movie.find({}).populate('author');
     res.render('movies/index', { movies });
 }
 
@@ -38,7 +38,7 @@ module.exports.showMovie = async(req,res)=>{
 
 module.exports.renderEditForm = async(req,res)=>{
     const { id } = req.params; 
-    const movie = await Movie.findById(id);
+    const movie = await Movie.findById(id).populate('author');
     if(!movie){
         req.flash('error', 'Cannot find that movie!');
         return res.redirect('/movies');

@@ -5,26 +5,33 @@
       <a class="btn btn-primary" href="/movies/new">Add Movies</a>
    </div>
 
-   <% for(let movie of movies){%>
-   <div class="card mb-4">
-      <div class="row">
-         <div class="col-md-4">
-            <img class="img-fluid" alt="" src="<%= movie.images[0].url %>">
-         </div>
-         <div class="col-md-8">
-            <div class="card-body">
-               <h5 class="card-title"><%= movie.title %></h5>
-               <p class="card-text"><%= movie.description %></p>
-               <p class="card-text">
-                  <small class="text-muted"><%= movie.director %></small>
-               </p>
-               <p class="card-text">
-                  <small class="text-muted"><%= movie.imdb_rating %></small>
-               </p>
-               <a href="/movies/<%= movie._id %>" class="btn btn-primary">View <%= movie.title %></a>
+   <% if(!movies.length) { %>
+      <h1>Movie List is empty!</h1>
+   <% } else { %>
+      <% for(let movie of movies){%>
+         <div class="card mb-4">
+            <div class="row">
+               <div class="col-md-4">
+                  <img class="img-fluid" alt="" src="<%= movie.images[0].url %>">
+               </div>
+               <div class="col-md-8">
+                  <div class="card-body">
+                     <h5 class="card-title"><%= movie.title %></h5>
+                     <p class="card-text"><%= movie.description %></p>
+                     <p class="card-text">
+                        <small class="text-muted"><%= movie.director %></small>
+                     </p>
+                     <p class="card-text">
+                        <small class="text-muted"><%= movie.imdb_rating %></small>
+                     </p>
+                     <p class="card-text">
+                        <small class="text-muted">Submitted by <%= movie.author.username %></small>
+                     </p>
+                     <a href="/movies/<%= movie._id %>" class="btn btn-primary">View <%= movie.title %></a>
+                  </div>
+               </div>
             </div>
          </div>
-      </div>
-   </div>
-   <% }%>
+      <% } %>
+   <% } %>
    

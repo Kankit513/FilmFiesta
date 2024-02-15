@@ -42,7 +42,7 @@
                     Budget : &#8377 <%= movie.budget %> Cr
                 </li>
                 <li class="list-group-item">
-                    Box_office_collection : &#8377 <%= movie.box_office_collection %> Cr
+                    Box_Office_Collection : &#8377 <%= movie.box_office_collection %> Cr
                 </li>
                 <li class="list-group-item">
                     IMDB &#9733 : <%= movie.imdb_rating %> 
@@ -51,7 +51,7 @@
                     Submitted by <%= movie.author.username %>
                 </li>
             </ul>
-            <% if(currentUser && movie.author.equals(currentUser._id)) { %>
+            <% if((currentUser && currentUser.isAdmin==true) || (currentUser && movie.author.equals(currentUser._id))) { %>
                 <div class="card-body">
                     <a class="card-link btn btn-info me-2" href="/movies/<%= movie._id%>/edit">Edit</a>
                     <form class="d-inline" action="/movies/<%= movie._id %>?_method=DELETE" method="POST">
@@ -64,7 +64,7 @@
     </div>
 
     <div class="col-6">
-        <% if(currentUser) { %>
+        <% if((currentUser)) { %>
             <h2 class="text-white">Leave a Review</h2>
             <form action="/movies/<%= movie._id %>/reviews" method="POST" class="mb-3 validated-form" novalidate>
                 <div class="mb-3">
@@ -106,7 +106,7 @@
                             <p class="card-text">
                                 Review: <%= review.body %>
                             </p>
-                            <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                            <% if((currentUser && review.author.equals(currentUser._id)) || (currentUser && currentUser.isAdmin==true)) { %>
                                 <form action="/movies/<%= movie._id %>/reviews/<%= review._id %>?_method=DELETE"
                                     method="POST">
                                     <button class="btn btn-sm btn-danger">Delete</button>

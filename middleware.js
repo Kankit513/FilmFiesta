@@ -24,24 +24,41 @@ module.exports.validateMovie = (req,res,next)=>{
     }
 }
 
-module.exports.isAuthor = async(req,res,next)=>{
-    const { id } = req.params; 
-    const movie = await Movie.findById(id);
-    if(!movie.author.equals(req.user._id)){
-        req.flash('error', "You don't have permission to do that!");
-        return res.redirect(`/movies/${id}`);
+module.exports.isUserAdmin = async(req,res,next)=>{
+    const { id } = req.params;
+    if(!req.user.isAdmin){
+        req.flash('error', "You are not an admin!");
+        return res.redirect(`/movies`);
     }
     next();
 }
 
-module.exports.isReviewAuthor = async(req,res,next)=>{
-    const { id, reviewId } = req.params; 
-    const review = await Review.findById(reviewId);
-    if(!review.author.equals(req.user._id)){
+module.exports.isAuthorOrAdmin = async(req,res,next)=>{
+    const { id } = req.params; 
+    const movie = await Movie.findById(id);
+    if((movie.author.equals(req.user._id)) || (req.user.isAdmin)){
+        // req.flash('error', "You don't have permission to do that!");
+        // return res.redirect(`/movies/${id}`);
+        next();
+    }
+    else{
         req.flash('error', "You don't have permission to do that!");
         return res.redirect(`/movies/${id}`);
+    }        
+}
+
+module.exports.isReviewAuthorOrAdmin = async(req,res,next)=>{
+    const { id, reviewId } = req.params; 
+    const review = await Review.findById(reviewId);
+    if((review.author.equals(req.user._id)) || (req.user.isAdmin)){
+        // req.flash('error', "You don't have permission to do that!");
+        // return res.redirect(`/movies/${id}`);
+        next();
     }
-    next();
+    else{
+        req.flash('error', "You don't have permission to do that!");
+        return res.redirect(`/movies/${id}`);
+    } 
 }
 
 module.exports.validateReview = (req,res,next)=>{
